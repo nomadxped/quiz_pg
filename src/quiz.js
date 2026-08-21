@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const subject = localStorage.getItem('pgdca_current_subject');
 
     if (!studentName || !subject) {
-        window.location.href = '/';
+        window.location.href = './';
         return;
     }
 
@@ -107,7 +107,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 total,
                 timestamp: new Date()
             });
-            window.location.href = '/leaderboard.html';
+            window.location.href = './leaderboard.html';
         } catch (e) {
             console.error("Error submitting score: ", e);
             alert("Error submitting score. See console.");

@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // If they haven't set a name yet, redirect home to set it
             if (!currentName) {
                 localStorage.setItem('pgdca_current_subject', subject);
-                window.location.href = '/';
+                window.location.href = './';
                 return;
             }
             
@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 window.location.reload();
             } 
             else if (!window.location.pathname.includes('quiz.html')) {
-                window.location.href = '/quiz.html';
+                window.location.href = './quiz.html';
             } 
             else {
                 window.location.reload();

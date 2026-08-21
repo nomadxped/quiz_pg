@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('pgdca_current_subject', subject);
         
         // Navigate
-        window.location.href = '/quiz.html';
+        window.location.href = './quiz.html';
       });
     });
 });
