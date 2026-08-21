@@ -3,25 +3,49 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin - Upload Quiz</title>
+  <title>Admin - Secure Dashboard</title>
   <link rel="stylesheet" href="/src/style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
 </head>
 <body>
   <div class="blob-bg"></div>
-  <div class="container main-container glass-panel pulse-enter">
+  <div class="container main-container glass-panel pulse-enter" style="max-width: 800px;">
     <header class="hero">
       <h1 style="font-size: 2rem;">Admin Dashboard</h1>
-      <p style="color: var(--primary-color);">Upload Quiz Data to Firestore</p>
+      <p style="color: var(--primary-color);">Secure Live Editor</p>
     </header>
 
-    <div class="input-group">
-      <label for="jsonFile">Select JSON Quiz File</label>
-      <input type="file" id="jsonFile" accept=".json" />
-      <span style="display: block; font-size: 0.8rem; color: #94a3b8; margin-top: 0.5rem;">See documentation for correct JSON structure. Uploading adds to existing questions.</span>
+    <!-- Login Form (Shown by default) -->
+    <div id="loginSection" class="login-form">
+      <div class="input-group">
+        <label for="adminEmail">Admin Email</label>
+        <input type="text" id="adminEmail" placeholder="admin@domain.com" autocomplete="off" />
+      </div>
+      <div class="input-group">
+        <label for="adminPassword" style="display: block; margin-bottom: 0.75rem; font-weight: 600; color: #cbd5e1;">Password</label>
+        <input type="password" id="adminPassword" placeholder="••••••••" style="width: 100%; padding: 1rem 1.25rem; border-radius: 12px; background: rgba(0, 0, 0, 0.2); border: 1px solid rgba(255, 255, 255, 0.1); color: white; font-family: inherit; font-size: 1rem; transition: all 0.3s ease;" />
+      </div>
+      <button id="loginBtn" class="btn-primary" style="width: 100%;">Login as Admin</button>
     </div>
 
-    <button id="uploadBtn" class="btn-primary" style="width: 100%;">Upload to Firestore</button>
+    <!-- Upload/Edit Form (Hidden by default) -->
+    <div id="uploadSection" style="display: none;">
+      <p style="margin-bottom: 1.5rem; padding: 1rem; border-radius: 8px; background: rgba(16, 185, 129, 0.1); border: 1px solid var(--success); color: #34d399;">Authentication verified. You are authorized to manage the database.</p>
+      
+      <div class="input-group">
+        <label for="jsonEditor">Master Database Edit</label>
+        <span style="display: block; font-size: 0.8rem; color: #94a3b8; margin-bottom: 0.5rem;">Below is the current JSON fetched from Firestore. Changes made here will OVERWRITE the entire database when saved.</span>
+        <textarea id="jsonEditor" rows="18" style="width: 100%; padding: 1rem; border-radius: 12px; background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.2); color: #cbd5e1; font-family: monospace; font-size: 0.9rem; resize: vertical; line-height: 1.4; white-space: pre;"></textarea>
+      </div>
+
+      <div style="margin-bottom: 1.5rem; padding: 1rem; background: rgba(255,255,255,0.05); border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
+         <span style="display: block; font-size: 0.85rem; color: #94a3b8; margin-bottom: 0.5rem;">Or load JSON from a file to overwrite the editor box:</span>
+         <input type="file" id="jsonFile" accept=".json" style="font-size: 0.8rem; background: transparent; padding: 0;" />
+      </div>
+
+      <button id="uploadBtn" class="btn-primary" style="width: 100%;">Save & Replace Database</button>
+      <button id="logoutBtn" style="margin-top: 1rem; width: 100%; padding: 1rem; background: rgba(239, 68, 68, 0.05); border: 1px solid rgba(239, 68, 68, 0.5); border-radius: 12px; color: #f87171; cursor: pointer; transition: 0.3s;">Logout</button>
+    </div>
     
     <div id="statusMsg" class="status"></div>
 
@@ -29,7 +53,6 @@
       <a href="/" class="nav-link">← Return to Application</a>
     </footer>
   </div>
-  
   <script type="module" src="/src/admin.js"></script>
 </body>
 </html>

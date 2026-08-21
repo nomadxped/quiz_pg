@@ -8,7 +8,20 @@
   <link rel="stylesheet" href="/src/style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
 </head>
-<body>
+<body style="padding-top: 5rem;">
+  <nav class="top-nav">
+    <div style="display: flex; align-items: center; gap: 1.5rem;">
+      <a href="/" class="nav-brand">PGDCA Quiz</a>
+      <a href="/leaderboard.html" style="color: #fbbf24; text-decoration: none; font-weight: 600;">🏆 Leaderboard</a>
+    </div>
+    <div class="nav-links">
+       <button class="nav-subject-btn" data-subject="SAD">SAD</button>
+       <button class="nav-subject-btn" data-subject="DSA">DSA</button>
+       <button class="nav-subject-btn" data-subject="C++">C++</button>
+       <button class="nav-subject-btn" data-subject="DBMS">DBMS</button>
+       <button class="nav-subject-btn" data-subject="NM">Math & Stat</button>
+    </div>
+  </nav>
   <div class="blob-bg"></div>
   <div class="container main-container glass-panel pulse-enter">
     <header class="hero">
@@ -29,7 +42,7 @@
           <button class="subject-card" data-subject="DSA">Data Structures & Algo</button>
           <button class="subject-card" data-subject="C++">C++ Programming</button>
           <button class="subject-card" data-subject="DBMS">DBMS</button>
-          <button class="subject-card" data-subject="NM">Numerical Method & Stat</button>
+          <button class="subject-card" data-subject="NM">Numerical Method & Statistics</button>
         </div>
       </div>
     </main>
@@ -41,5 +54,6 @@
   </div>
   
   <script type="module" src="/src/app.js"></script>
+  <script type="module" src="/src/nav.js"></script>
 </body>
 </html>

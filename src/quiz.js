@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     let questions = [];
     let currentQuestionIndex = 0;
     let score = 0;
+    const nextBtn = document.getElementById('nextBtn');
 
     try {
         const q = query(collection(db, "questions"), where("subject", "==", subject));
@@ -33,11 +34,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         showQuestion();
 
     } catch (error) {
-        console.error("Error fetching questions:", error);
-        alert("Found an error fetching questions.");
+        console.error("Error details:", error);
+        alert(`Firebase Error: ${error.message}\n\n(Check your browser Developer Console for more details)`);
     }
 
-    const nextBtn = document.getElementById('nextBtn');
     nextBtn.addEventListener('click', async () => {
         const selectedOption = document.querySelector('.option-btn.selected');
         if (!selectedOption) {
