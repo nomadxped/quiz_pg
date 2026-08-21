@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,6 +9,7 @@
   <link rel="stylesheet" href="/src/style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
 </head>
+
 <body style="padding-top: 5rem;">
   <nav class="top-nav">
     <div style="display: flex; align-items: center; gap: 1.5rem;">
@@ -15,11 +17,11 @@
       <a href="./leaderboard.html" style="color: #fbbf24; text-decoration: none; font-weight: 600;">🏆 Leaderboard</a>
     </div>
     <div class="nav-links">
-       <button class="nav-subject-btn" data-subject="SAD">SAD</button>
-       <button class="nav-subject-btn" data-subject="DSA">DSA</button>
-       <button class="nav-subject-btn" data-subject="C++">C++</button>
-       <button class="nav-subject-btn" data-subject="DBMS">DBMS</button>
-       <button class="nav-subject-btn" data-subject="NM">Math & Stat</button>
+      <button class="nav-subject-btn" data-subject="SAD">SAD</button>
+      <button class="nav-subject-btn" data-subject="DSA">DSA</button>
+      <button class="nav-subject-btn" data-subject="C++">C++</button>
+      <button class="nav-subject-btn" data-subject="DBMS">DBMS</button>
+      <button class="nav-subject-btn" data-subject="NM">Math & Stat</button>
     </div>
   </nav>
   <div class="blob-bg"></div>
@@ -28,13 +30,13 @@
       <h1>PGDCA Semester 2</h1>
       <p>Test your knowledge and view your rankings.</p>
     </header>
-    
+
     <main class="login-form">
       <div class="input-group">
-        <label for="studentName">Your Full Name</label>
-        <input type="text" id="studentName" placeholder="e.g. John Doe" autocomplete="off" />
+        <label for="studentName">Your Name</label>
+        <input type="text" id="studentName" placeholder="e.g. Anurup" autocomplete="off" />
       </div>
-      
+
       <div class="input-group">
         <label>Select Subject</label>
         <div class="subject-grid">
@@ -52,8 +54,9 @@
       <a href="./admin.html" class="nav-link">Upload Quiz</a>
     </footer>
   </div>
-  
+
   <script type="module" src="/src/app.js"></script>
   <script type="module" src="/src/nav.js"></script>
 </body>
+
 </html>
