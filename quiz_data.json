@@ -1,0 +1,44 @@
+[
+  {
+    "subject": "SAD",
+    "questionText": "What does SDLC stand for?",
+    "options": ["System Design Life Cycle", "Software Development Life Cycle", "System Development Life Cycle", "Software Design Life Cycle"],
+    "correctIndex": 2
+  },
+  {
+    "subject": "SAD",
+    "questionText": "Which is the first stage in the SDLC?",
+    "options": ["Implementation", "Testing", "Requirement Analysis", "Design"],
+    "correctIndex": 2
+  },
+  {
+    "subject": "DSA",
+    "questionText": "What data structure uses LIFO (Last In First Out)?",
+    "options": ["Queue", "Stack", "Tree", "Graph"],
+    "correctIndex": 1
+  },
+  {
+    "subject": "DSA",
+    "questionText": "What is the worst-case time complexity of QuickSort?",
+    "options": ["O(n log n)", "O(n)", "O(n^2)", "O(log n)"],
+    "correctIndex": 2
+  },
+  {
+    "subject": "C++",
+    "questionText": "Which concept allows you to have multiple functions with the same name?",
+    "options": ["Polymorphism", "Inheritance", "Function Overloading", "Encapsulation"],
+    "correctIndex": 2
+  },
+  {
+    "subject": "DBMS",
+    "questionText": "Which command is used to remove a table in SQL?",
+    "options": ["DROP TABLE", "DELETE TABLE", "REMOVE TABLE", "TRUNCATE TABLE"],
+    "correctIndex": 0
+  },
+  {
+    "subject": "NM",
+    "questionText": "Which method is also known as the method of chords?",
+    "options": ["Bisection Method", "Newton-Raphson Method", "Regula Falsi Method", "Secant Method"],
+    "correctIndex": 3
+  }
+]

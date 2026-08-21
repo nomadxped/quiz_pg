@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="PGDCA Semester 2 Quiz Platform" />
+  <title>PGDCA Semester 2 Quiz</title>
+  <link rel="stylesheet" href="/src/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="blob-bg"></div>
+  <div class="container main-container glass-panel pulse-enter">
+    <header class="hero">
+      <h1>PGDCA Semester 2</h1>
+      <p>Test your knowledge and view your rankings.</p>
+    </header>
+    
+    <main class="login-form">
+      <div class="input-group">
+        <label for="studentName">Your Full Name</label>
+        <input type="text" id="studentName" placeholder="e.g. John Doe" autocomplete="off" />
+      </div>
+      
+      <div class="input-group">
+        <label>Select Subject</label>
+        <div class="subject-grid">
+          <button class="subject-card" data-subject="SAD">System Analysis and Design</button>
+          <button class="subject-card" data-subject="DSA">Data Structures & Algo</button>
+          <button class="subject-card" data-subject="C++">C++ Programming</button>
+          <button class="subject-card" data-subject="DBMS">DBMS</button>
+          <button class="subject-card" data-subject="NM">Numerical Method & Stat</button>
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer-links">
+      <a href="/leaderboard.html" class="nav-link">🏆 View Leaderboard</a>
+      <a href="/admin.html" class="nav-link">Upload Quiz</a>
+    </footer>
+  </div>
+  
+  <script type="module" src="/src/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Leaderboard</title>
+  <link rel="stylesheet" href="/src/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="blob-bg"></div>
+  <div class="container main-container glass-panel pulse-enter">
+    <header class="hero">
+      <h1>Leaderboard 🏆</h1>
+      <p>Top performers in each subject.</p>
+    </header>
+    
+    <div class="input-group">
+      <label for="subjectSelect" style="color: white; font-weight: 500;">Filter by Subject</label>
+      <select id="subjectSelect" style="width: 100%; padding: 1rem; border-radius: 12px; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.2); color: white; margin-bottom: 2rem; font-family: inherit;">
+        <option value="SAD">System Analysis and Design</option>
+        <option value="DSA">Data Structures & Algo</option>
+        <option value="C++">C++ Programming</option>
+        <option value="DBMS">DBMS</option>
+        <option value="NM">Numerical Method & Stat</option>
+      </select>
+    </div>
+    
+    <div id="loading" style="text-align: center; color: var(--primary-color);">Loading rankings...</div>
+    
+    <ul id="leaderboardList" style="list-style: none; padding: 0;">
+      <!-- Generated via JS -->
+    </ul>
+    
+    <footer class="footer-links" style="margin-top: 3rem; text-align: center; display: block;">
+      <a href="/" class="nav-link">← Back to Home Dashboard</a>
+    </footer>
+  </div>
+  <script type="module" src="/src/leaderboard.js"></script>
+</body>
+</html>

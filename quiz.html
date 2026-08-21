@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quiz Dashboard</title>
+  <link rel="stylesheet" href="/src/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="blob-bg"></div>
+  <div class="container main-container glass-panel pulse-enter">
+    <div class="quiz-header">
+      <span id="subjectDisplay">Subject: ...</span>
+      <span id="studentDisplay">Player: ...</span>
+    </div>
+    
+    <div id="quizContent" style="display: none;">
+      <div id="questionContainer" class="question-container">
+        <!-- Questions injected here -->
+      </div>
+      <button id="nextBtn" class="btn-primary" style="width: 100%; display: none;">Next / Submit</button>
+    </div>
+
+    <div id="loading" style="text-align: center;">Loading questions...</div>
+    <div id="noQuestions" class="status error" style="display: none; margin-top:2rem; text-align: center;">No questions available for this subject yet. Please ask your administrator to upload the questions via the Admin Dashboard.</div>
+
+    <footer class="footer-links" style="margin-top: 3rem; text-align: center; display: block; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem;">
+      <a href="/" class="nav-link">Exit Quiz Mode</a>
+    </footer>
+  </div>
+  <script type="module" src="/src/quiz.js"></script>
+</body>
+</html>

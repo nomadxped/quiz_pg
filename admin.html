@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin - Upload Quiz</title>
+  <link rel="stylesheet" href="/src/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="blob-bg"></div>
+  <div class="container main-container glass-panel pulse-enter">
+    <header class="hero">
+      <h1 style="font-size: 2rem;">Admin Dashboard</h1>
+      <p style="color: var(--primary-color);">Upload Quiz Data to Firestore</p>
+    </header>
+
+    <div class="input-group">
+      <label for="jsonFile">Select JSON Quiz File</label>
+      <input type="file" id="jsonFile" accept=".json" />
+      <span style="display: block; font-size: 0.8rem; color: #94a3b8; margin-top: 0.5rem;">See documentation for correct JSON structure. Uploading adds to existing questions.</span>
+    </div>
+
+    <button id="uploadBtn" class="btn-primary" style="width: 100%;">Upload to Firestore</button>
+    
+    <div id="statusMsg" class="status"></div>
+
+    <footer class="footer-links" style="margin-top: 3rem; text-align: center; display: block; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem;">
+      <a href="/" class="nav-link">← Return to Application</a>
+    </footer>
+  </div>
+  
+  <script type="module" src="/src/admin.js"></script>
+</body>
+</html>
