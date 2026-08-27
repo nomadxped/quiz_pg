@@ -1,5 +1,5 @@
 import { db } from './firebase-config.js';
-import { collection, query, where, getDocs, addDoc } from 'firebase/firestore';
+import { collection, query, where, getDocs, addDoc, doc, updateDoc } from 'firebase/firestore';
 
 document.addEventListener('DOMContentLoaded', async () => {
     const studentName = localStorage.getItem('pgdca_student_name');
@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     let currentQuestionIndex = 0;
     let score = 0;
     let wrongScore = 0;
+    let currentScoreDocId = null;
 
     // Web Audio API for synthetic sounds
     const AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -55,12 +56,28 @@ document.addEventListener('DOMContentLoaded', async () => {
         const querySnapshot = await getDocs(q);
         questions = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
+        // Shuffle questions
+        for (let i = questions.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [questions[i], questions[j]] = [questions[j], questions[i]];
+        }
+
         document.getElementById('loading').style.display = 'none';
 
         if (questions.length === 0) {
             document.getElementById('noQuestions').style.display = 'block';
             return;
         }
+
+        // Initialize score doc for live tracking
+        const docRef = await addDoc(collection(db, "scores"), {
+            studentName,
+            subject,
+            score: 0,
+            total: questions.length,
+            timestamp: new Date()
+        });
+        currentScoreDocId = docRef.id;
 
         document.getElementById('quizContent').style.display = 'block';
         document.getElementById('liveScoreTracker').style.display = 'block';
@@ -91,7 +108,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             btn.textContent = opt;
             btn.dataset.correct = (idx === q.correctIndex) ? 'true' : 'false';
             
-            btn.addEventListener('click', () => {
+            btn.addEventListener('click', async () => {
                 // Prevent multiple clicks
                 if (optionsGrid.style.pointerEvents === 'none') return;
                 optionsGrid.style.pointerEvents = 'none';
@@ -106,6 +123,13 @@ document.addEventListener('DOMContentLoaded', async () => {
                     playSound('right');
                     score++;
                     document.getElementById('correctPts').textContent = score;
+                    if (currentScoreDocId) {
+                        try {
+                            await updateDoc(doc(db, "scores", currentScoreDocId), { score });
+                        } catch (e) {
+                            console.error("Live track error:", e);
+                        }
+                    }
                 } else {
                     btn.classList.add('selected');
                     btn.style.backgroundColor = '#ef4444'; // Red
@@ -140,26 +164,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     async function submitScore(finalScore, total) {
-        try {
-            document.getElementById('quizContent').innerHTML = `
-                <div style="text-align: center; margin: 3rem 0;">
-                    <h2>Submitting your score...</h2>
-                    <br/>
-                    <div style="width: 50px; height: 50px; border: 4px solid rgba(255,255,255,0.2); border-left-color: var(--primary-color); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto;"></div>
-                </div>
-                <style>@keyframes spin { 100% { transform: rotate(360deg); } }</style>
-            `;
-            await addDoc(collection(db, "scores"), {
-                studentName,
-                subject,
-                score: finalScore,
-                total,
-                timestamp: new Date()
-            });
-            window.location.href = './leaderboard.html';
-        } catch (e) {
-            console.error("Error submitting score: ", e);
-            alert("Error submitting score. See console.");
-        }
+        document.getElementById('quizContent').innerHTML = `
+            <div style="text-align: center; margin: 3rem 0;">
+                <h2>Quiz Completed! Redirecting...</h2>
+                <br/>
+                <div style="width: 50px; height: 50px; border: 4px solid rgba(255,255,255,0.2); border-left-color: var(--primary-color); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto;"></div>
+            </div>
+            <style>@keyframes spin { 100% { transform: rotate(360deg); } }</style>
+        `;
+        setTimeout(() => { window.location.href = './leaderboard.html'; }, 1500);
     }
 });
