@@ -16,7 +16,39 @@ document.addEventListener('DOMContentLoaded', async () => {
     let questions = [];
     let currentQuestionIndex = 0;
     let score = 0;
-    const nextBtn = document.getElementById('nextBtn');
+    let wrongScore = 0;
+
+    // Web Audio API for synthetic sounds
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    const audioCtx = new AudioContext();
+
+    function playSound(type) {
+        if (audioCtx.state === 'suspended') {
+            audioCtx.resume();
+        }
+        const osc = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+        osc.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+        
+        if (type === 'right') {
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.1);
+            gainNode.gain.setValueAtTime(1, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.5);
+        } else if (type === 'wrong') {
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+            osc.frequency.linearRampToValueAtTime(100, audioCtx.currentTime + 0.3);
+            gainNode.gain.setValueAtTime(0.5, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.3);
+        }
+    }
 
     try {
         const q = query(collection(db, "questions"), where("subject", "==", subject));
@@ -31,32 +63,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         document.getElementById('quizContent').style.display = 'block';
+        document.getElementById('liveScoreTracker').style.display = 'block';
         showQuestion();
 
     } catch (error) {
         console.error("Error details:", error);
         alert(`Firebase Error: ${error.message}\n\n(Check your browser Developer Console for more details)`);
     }
-
-    nextBtn.addEventListener('click', async () => {
-        const selectedOption = document.querySelector('.option-btn.selected');
-        if (!selectedOption) {
-            alert('Please select an option first!');
-            return;
-        }
-
-        if (selectedOption.dataset.correct === 'true') {
-            score++;
-        }
-
-        currentQuestionIndex++;
-        if (currentQuestionIndex < questions.length) {
-            showQuestion();
-            nextBtn.style.display = 'none';
-        } else {
-            await submitScore(score, questions.length);
-        }
-    });
 
     function showQuestion() {
         const qContainer = document.getElementById('questionContainer');
@@ -79,15 +92,51 @@ document.addEventListener('DOMContentLoaded', async () => {
             btn.dataset.correct = (idx === q.correctIndex) ? 'true' : 'false';
             
             btn.addEventListener('click', () => {
-                document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
-                btn.classList.add('selected');
-                nextBtn.style.display = 'block';
+                // Prevent multiple clicks
+                if (optionsGrid.style.pointerEvents === 'none') return;
+                optionsGrid.style.pointerEvents = 'none';
+                
+                const isCorrect = btn.dataset.correct === 'true';
+                
+                // Color choices KBC style
+                if (isCorrect) {
+                    btn.classList.add('selected');
+                    btn.style.backgroundColor = '#10b981'; // Green
+                    btn.style.borderColor = '#10b981';
+                    playSound('right');
+                    score++;
+                    document.getElementById('correctPts').textContent = score;
+                } else {
+                    btn.classList.add('selected');
+                    btn.style.backgroundColor = '#ef4444'; // Red
+                    btn.style.borderColor = '#ef4444';
+                    playSound('wrong');
+                    wrongScore++;
+                    document.getElementById('wrongPts').textContent = wrongScore;
+                    
+                    // Highlight actual correct answer in green
+                    document.querySelectorAll('.option-btn').forEach(b => {
+                        if (b.dataset.correct === 'true') {
+                            b.style.backgroundColor = '#10b981';
+                            b.style.borderColor = '#10b981';
+                        }
+                    });
+                }
+                
+                // Wait for a few seconds before moving on
+                setTimeout(async () => {
+                    currentQuestionIndex++;
+                    if (currentQuestionIndex < questions.length) {
+                        showQuestion();
+                    } else {
+                        await submitScore(score, questions.length);
+                    }
+                }, 2000);
             });
             optionsGrid.appendChild(btn);
         });
 
         qContainer.appendChild(optionsGrid);
-        nextBtn.textContent = (currentQuestionIndex === questions.length - 1) ? 'Finish Quiz' : 'Next Question';
     }
 
     async function submitScore(finalScore, total) {

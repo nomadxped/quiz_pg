@@ -27,12 +27,17 @@
       <span id="subjectDisplay">Subject: ...</span>
       <span id="studentDisplay">Player: ...</span>
     </div>
+
+    <div id="liveScoreTracker" style="text-align: center; margin-bottom: 1.5rem; font-weight: 600; font-size: 1.2rem; background: rgba(0,0,0,0.2); padding: 0.75rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); display: none;">
+      <span style="color: #34d399;">Correct: <span id="correctPts">0</span></span>
+      <span style="margin: 0 1rem; color: #64748b;">|</span>
+      <span style="color: #f87171;">Wrong: <span id="wrongPts">0</span></span>
+    </div>
     
     <div id="quizContent" style="display: none;">
       <div id="questionContainer" class="question-container">
         <!-- Questions injected here -->
       </div>
-      <button id="nextBtn" class="btn-primary" style="width: 100%; display: none;">Next / Submit</button>
     </div>
 
     <div id="loading" style="text-align: center;">Loading questions...</div>
