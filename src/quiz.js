@@ -39,6 +39,26 @@ document.addEventListener('DOMContentLoaded', async () => {
     let currentQuestionIndex = 0;
     let score = 0;
     let wrongScore = 0;
+    let userAnswers = []; // stores { selectedIndex: Number, isCorrect: Boolean }
+    
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    
+    prevBtn.addEventListener('click', () => {
+        if (currentQuestionIndex > 0) {
+            currentQuestionIndex--;
+            showQuestion();
+        }
+    });
+
+    nextBtn.addEventListener('click', () => {
+        if (currentQuestionIndex === questions.length - 1) {
+            submitScore(score, questions.length);
+            return;
+        }
+        currentQuestionIndex++;
+        showQuestion();
+    });
 
     // Web Audio API for synthetic sounds
     const AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -105,6 +125,18 @@ document.addEventListener('DOMContentLoaded', async () => {
         const q = questions[currentQuestionIndex];
         qContainer.innerHTML = '';
         
+        // Update Nav Buttons
+        prevBtn.disabled = currentQuestionIndex === 0;
+        prevBtn.style.opacity = currentQuestionIndex === 0 ? '0.5' : '1';
+        
+        if (currentQuestionIndex === questions.length - 1) {
+            nextBtn.textContent = 'Finish Quiz';
+            nextBtn.style.backgroundColor = 'var(--primary-color)';
+        } else {
+            nextBtn.textContent = userAnswers[currentQuestionIndex] !== undefined ? 'Next' : 'Skip';
+            nextBtn.style.backgroundColor = userAnswers[currentQuestionIndex] !== undefined ? 'var(--primary-color)' : '#475569';
+        }
+        
         const qText = document.createElement('h3');
         qText.textContent = `${currentQuestionIndex + 1}. ${q.questionText}`;
         qText.style.marginBottom = '1rem';
@@ -114,56 +146,77 @@ document.addEventListener('DOMContentLoaded', async () => {
         const optionsGrid = document.createElement('div');
         optionsGrid.className = 'options-grid';
 
+        const existingAnswer = userAnswers[currentQuestionIndex];
+
         q.options.forEach((opt, idx) => {
             const btn = document.createElement('button');
             btn.className = 'option-btn';
             btn.textContent = opt;
             btn.dataset.correct = (idx === q.correctIndex) ? 'true' : 'false';
             
-            btn.addEventListener('click', async () => {
-                // Prevent multiple clicks
-                if (optionsGrid.style.pointerEvents === 'none') return;
+            if (existingAnswer !== undefined) {
+                // Already answered -> Read-only mode
                 optionsGrid.style.pointerEvents = 'none';
                 
-                const isCorrect = btn.dataset.correct === 'true';
-                
-                // Color choices KBC style
-                if (isCorrect) {
+                if (idx === existingAnswer.selectedIndex) {
                     btn.classList.add('selected');
-                    btn.style.backgroundColor = '#10b981'; // Green
-                    btn.style.borderColor = '#10b981';
-                    playSound('right');
-                    score++;
-                    document.getElementById('correctPts').textContent = score;
-                    setRandomMotivation('generic');
-                } else {
-                    btn.classList.add('selected');
-                    btn.style.backgroundColor = '#ef4444'; // Red
-                    btn.style.borderColor = '#ef4444';
-                    playSound('wrong');
-                    wrongScore++;
-                    document.getElementById('wrongPts').textContent = wrongScore;
-                    setRandomMotivation('mistake');
-                    
-                    // Highlight actual correct answer in green
-                    document.querySelectorAll('.option-btn').forEach(b => {
-                        if (b.dataset.correct === 'true') {
-                            b.style.backgroundColor = '#10b981';
-                            b.style.borderColor = '#10b981';
-                        }
-                    });
+                    if (existingAnswer.isCorrect) {
+                        btn.style.backgroundColor = '#10b981'; 
+                        btn.style.borderColor = '#10b981';
+                    } else {
+                        btn.style.backgroundColor = '#ef4444'; 
+                        btn.style.borderColor = '#ef4444';
+                    }
                 }
                 
-                // Wait for a few seconds before moving on
-                setTimeout(async () => {
-                    currentQuestionIndex++;
-                    if (currentQuestionIndex < questions.length) {
-                        showQuestion();
+                if (idx === q.correctIndex) {
+                    btn.style.backgroundColor = '#10b981';
+                    btn.style.borderColor = '#10b981';
+                }
+            } else {
+                btn.addEventListener('click', () => {
+                    if (optionsGrid.style.pointerEvents === 'none') return;
+                    optionsGrid.style.pointerEvents = 'none';
+                    
+                    const isCorrect = btn.dataset.correct === 'true';
+                    
+                    userAnswers[currentQuestionIndex] = {
+                        selectedIndex: idx,
+                        isCorrect: isCorrect
+                    };
+                    
+                    if (isCorrect) {
+                        btn.classList.add('selected');
+                        btn.style.backgroundColor = '#10b981';
+                        btn.style.borderColor = '#10b981';
+                        playSound('right');
+                        score++;
+                        document.getElementById('correctPts').textContent = score;
+                        setRandomMotivation('generic');
                     } else {
-                        await submitScore(score, questions.length);
+                        btn.classList.add('selected');
+                        btn.style.backgroundColor = '#ef4444';
+                        btn.style.borderColor = '#ef4444';
+                        playSound('wrong');
+                        wrongScore++;
+                        document.getElementById('wrongPts').textContent = wrongScore;
+                        setRandomMotivation('mistake');
+                        
+                        document.querySelectorAll('.option-btn').forEach(b => {
+                            if (b.dataset.correct === 'true') {
+                                b.style.backgroundColor = '#10b981';
+                                b.style.borderColor = '#10b981';
+                            }
+                        });
                     }
-                }, 2000);
-            });
+                    
+                    // Update Next button visually to indicate they should proceed
+                    if (currentQuestionIndex !== questions.length - 1) {
+                        nextBtn.textContent = 'Next';
+                        nextBtn.style.backgroundColor = 'var(--primary-color)';
+                    }
+                });
+            }
             optionsGrid.appendChild(btn);
         });
 
