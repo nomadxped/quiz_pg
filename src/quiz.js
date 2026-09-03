@@ -1,23 +1,44 @@
 import { db } from './firebase-config.js';
-import { collection, query, where, getDocs, addDoc, doc, updateDoc } from 'firebase/firestore';
+import { collection, query, where, getDocs } from 'firebase/firestore';
 
 document.addEventListener('DOMContentLoaded', async () => {
-    const studentName = localStorage.getItem('pgdca_student_name');
     const subject = localStorage.getItem('pgdca_current_subject');
 
-    if (!studentName || !subject) {
+    if (!subject) {
         window.location.href = './';
         return;
     }
 
     document.getElementById('subjectDisplay').textContent = `Subject: ${subject}`;
-    document.getElementById('studentDisplay').textContent = `Player: ${studentName}`;
+
+    const genericMotivations = [
+        "You've got this! Keep pushing forward! 🚀",
+        "Believe in yourself! Every question is a new opportunity. ✨",
+        "Success is a journey, not a destination. Enjoy the process! 🎯",
+        "Stay focused and stay sharp! 🧠",
+        "You are capable of amazing things! 🌟"
+    ];
+
+    const mistakeMotivations = [
+        "Keep going, mistakes happen! That's how we learn. 💪",
+        "Don't worry! Every mistake is a stepping stone to success. 🧗‍♂️",
+        "Dust it off and try the next one. You can do it! 🌈",
+        "It's just a small bump in the road. Keep moving forward! 🛣️",
+        "Learning is about making mistakes and growing from them. 🌱"
+    ];
+
+    const motivationalLineEl = document.getElementById('motivationalLine');
+    function setRandomMotivation(type = 'generic') {
+        const arr = type === 'mistake' ? mistakeMotivations : genericMotivations;
+        const randomQuote = arr[Math.floor(Math.random() * arr.length)];
+        motivationalLineEl.textContent = randomQuote;
+    }
+
 
     let questions = [];
     let currentQuestionIndex = 0;
     let score = 0;
     let wrongScore = 0;
-    let currentScoreDocId = null;
 
     // Web Audio API for synthetic sounds
     const AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -69,18 +90,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
 
-        // Initialize score doc for live tracking
-        const docRef = await addDoc(collection(db, "scores"), {
-            studentName,
-            subject,
-            score: 0,
-            total: questions.length,
-            timestamp: new Date()
-        });
-        currentScoreDocId = docRef.id;
-
         document.getElementById('quizContent').style.display = 'block';
         document.getElementById('liveScoreTracker').style.display = 'block';
+        setRandomMotivation('generic');
         showQuestion();
 
     } catch (error) {
@@ -123,13 +135,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     playSound('right');
                     score++;
                     document.getElementById('correctPts').textContent = score;
-                    if (currentScoreDocId) {
-                        try {
-                            await updateDoc(doc(db, "scores", currentScoreDocId), { score });
-                        } catch (e) {
-                            console.error("Live track error:", e);
-                        }
-                    }
+                    setRandomMotivation('generic');
                 } else {
                     btn.classList.add('selected');
                     btn.style.backgroundColor = '#ef4444'; // Red
@@ -137,6 +143,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     playSound('wrong');
                     wrongScore++;
                     document.getElementById('wrongPts').textContent = wrongScore;
+                    setRandomMotivation('mistake');
                     
                     // Highlight actual correct answer in green
                     document.querySelectorAll('.option-btn').forEach(b => {
@@ -163,15 +170,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         qContainer.appendChild(optionsGrid);
     }
 
-    async function submitScore(finalScore, total) {
+    function submitScore(finalScore, total) {
         document.getElementById('quizContent').innerHTML = `
             <div style="text-align: center; margin: 3rem 0;">
-                <h2>Quiz Completed! Redirecting...</h2>
-                <br/>
-                <div style="width: 50px; height: 50px; border: 4px solid rgba(255,255,255,0.2); border-left-color: var(--primary-color); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto;"></div>
+                <h2>Quiz Completed!</h2>
+                <p style="font-size: 1.2rem; margin-top: 1rem; color: #a5b4fc;">You scored ${finalScore} out of ${total}.</p>
+                <div style="margin-top: 2rem;">
+                    <a href="./" class="nav-link" style="background: rgba(255,255,255,0.1); padding: 0.75rem 1.5rem; border-radius: 8px;">Go Home</a>
+                </div>
             </div>
-            <style>@keyframes spin { 100% { transform: rotate(360deg); } }</style>
         `;
-        setTimeout(() => { window.location.href = './leaderboard.html'; }, 1500);
     }
 });

@@ -3,15 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Quiz Dashboard</title>
+  <title>PGDCA-IT 2nd Semester quiz</title>
   <link rel="stylesheet" href="/src/style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
 </head>
 <body style="padding-top: 5rem;">
   <nav class="top-nav">
     <div style="display: flex; align-items: center; gap: 1.5rem;">
-      <a href="./" class="nav-brand">PGDCA Quiz</a>
-      <a href="./leaderboard.html" style="color: #fbbf24; text-decoration: none; font-weight: 600;">🏆 Leaderboard</a>
+      <a href="./" class="nav-brand">PGDCA-IT 2<sup>nd</sup> Semester quiz</a>
     </div>
     <div class="nav-links">
        <button class="nav-subject-btn" data-subject="SAD">SAD</button>
@@ -25,8 +24,10 @@
   <div class="container main-container glass-panel pulse-enter">
     <div class="quiz-header">
       <span id="subjectDisplay">Subject: ...</span>
-      <span id="studentDisplay">Player: ...</span>
     </div>
+
+    <!-- Motivational line injected here -->
+    <div id="motivationalLine" style="text-align: center; margin-bottom: 1rem; color: #fbbf24; font-style: italic; font-weight: 600; font-size: 1.1rem; min-height: 1.5rem; animation: fadeIn 0.5s;"></div>
 
     <div id="liveScoreTracker" style="text-align: center; margin-bottom: 1.5rem; font-weight: 600; font-size: 1.2rem; background: rgba(0,0,0,0.2); padding: 0.75rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); display: none;">
       <span style="color: #34d399;">Correct: <span id="correctPts">0</span></span>
@@ -44,7 +45,9 @@
     <div id="noQuestions" class="status error" style="display: none; margin-top:2rem; text-align: center;">No questions available for this subject yet. Please ask your administrator to upload the questions via the Admin Dashboard.</div>
 
     <footer class="footer-links" style="margin-top: 3rem; text-align: center; display: block; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem;">
-      <a href="./leaderboard.html" class="nav-link">End Quiz & View Leaderboard</a>
+      <span style="color: #cbd5e1; margin-right: 15px;">Made by Anvaya</span>
+      <a href="./" class="nav-link">End Quiz</a>
+      <a href="./chat.html" class="nav-link" style="color: #34d399; margin-left: 15px;">Chat & Help</a>
     </footer>
   </div>
   <script type="module" src="/src/quiz.js"></script>

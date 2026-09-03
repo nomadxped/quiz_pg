@@ -12,32 +12,18 @@ service cloud.firestore {
       allow write: if request.auth != null && request.auth.uid == 'JaWP7oxTMpUHumNv7cWAALYal5l2';
     }
     
-    // Scores collection
-    match /scores/{scoreId} {
-      // Everyone can read the leaderboard
+    // Messages collection for Chat & Help
+    match /messages/{messageId} {
       allow read: if true;
-      
-      // Students can CREATE a score, but strict validation applies
-      allow create: if request.resource.data.keys().hasAll(['studentName', 'subject', 'score', 'total', 'timestamp'])
-                    
-                    // Basic Type Checking
+      allow create: if request.resource.data.keys().hasAll(['studentName', 'text', 'timestamp'])
                     && request.resource.data.studentName is string
-                    && request.resource.data.subject is string
-                    && request.resource.data.score is number
-                    && request.resource.data.total is number
+                    && request.resource.data.text is string
                     && request.resource.data.timestamp is timestamp
-                    
-                    // Subject must be exactly one of the 5 allowed subjects
-                    && request.resource.data.subject in ['SAD', 'DSA', 'C++', 'DBMS', 'NM']
-                    
-                    // Logic Constraints: No negatives, score can't exceed total, name can't be empty
-                    && request.resource.data.score >= 0 
-                    && request.resource.data.score <= request.resource.data.total
                     && request.resource.data.studentName.size() > 0
-                    && request.resource.data.studentName.size() <= 100;
-                    
-      // NO ONE can modify or delete a score once it's created.
-      allow update, delete: if false; 
+                    && request.resource.data.studentName.size() <= 50
+                    && request.resource.data.text.size() > 0
+                    && request.resource.data.text.size() <= 500;
+      allow update, delete: if false;
     }
   }
 }
