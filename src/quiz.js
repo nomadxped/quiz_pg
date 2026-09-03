@@ -215,6 +215,16 @@ document.addEventListener('DOMContentLoaded', async () => {
                         nextBtn.textContent = 'Next';
                         nextBtn.style.backgroundColor = 'var(--primary-color)';
                     }
+                    
+                    // Auto-advance
+                    setTimeout(() => {
+                        if (currentQuestionIndex < questions.length - 1) {
+                            currentQuestionIndex++;
+                            showQuestion();
+                        } else {
+                            submitScore(score, questions.length);
+                        }
+                    }, 2000);
                 });
             }
             optionsGrid.appendChild(btn);
