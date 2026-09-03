@@ -8,7 +8,7 @@ export default defineConfig({
       input: {
         main: resolve(__dirname, 'index.html'),
         quiz: resolve(__dirname, 'quiz.html'),
-        leaderboard: resolve(__dirname, 'leaderboard.html'),
+        chat: resolve(__dirname, 'chat.html'),
         admin: resolve(__dirname, 'admin.html')
       }
     }
