@@ -103,6 +103,24 @@ document.addEventListener('DOMContentLoaded', async () => {
             [questions[i], questions[j]] = [questions[j], questions[i]];
         }
 
+        // Shuffle options for each question
+        questions.forEach(q => {
+            if (q.options && q.options.length > 0 && q.correctIndex !== undefined) {
+                let optionsData = q.options.map((opt, idx) => ({ 
+                    text: opt, 
+                    isCorrect: idx === q.correctIndex 
+                }));
+                
+                for (let i = optionsData.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [optionsData[i], optionsData[j]] = [optionsData[j], optionsData[i]];
+                }
+                
+                q.options = optionsData.map(opt => opt.text);
+                q.correctIndex = optionsData.findIndex(opt => opt.isCorrect);
+            }
+        });
+
         document.getElementById('loading').style.display = 'none';
 
         if (questions.length === 0) {
